@@ -1,6 +1,8 @@
 import React from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
+import AddTask from './components/AddTask.js';
+import TaskButton from './components/TaskButton.js';
 
 const TASKS = [
   {
@@ -13,6 +15,26 @@ const TASKS = [
     title: 'Cook Pasta',
     isComplete: true,
   },
+  {
+    id: 3,
+    title: 'Do Laundry',
+    isComplete: true,
+  },
+  {
+    id: 4,
+    title: 'Go Shopping',
+    isComplete: false,
+  },
+  {
+    id: 5,
+    title: 'Clean House',
+    isComplete: false,
+  },
+  {
+    id: 6,
+    title: 'Walk Dog',
+    isComplete: true,
+  },
 ];
 
 const App = () => {
@@ -23,6 +45,8 @@ const App = () => {
       </header>
       <main>
         <div><TaskList tasks={TASKS} /></div>
+        <div><AddTask/></div>
+        <div><TaskButton/></div>
       </main>
     </div>
   );
