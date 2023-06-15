@@ -3,6 +3,7 @@ import TaskList from './components/TaskList.js';
 import './App.css';
 import AddTask from './components/AddTask.js';
 import TaskButton from './components/TaskButton.js';
+import {useState}  from "react";
 
 const TASKS = [
   {
@@ -38,13 +39,19 @@ const TASKS = [
 ];
 
 const App = () => {
+
+  const [taskData, setTaskData]= useState(TASKS);
+
+  const onComplete = (id) => {
+    console.log(`Task ${id} is complete`);
+  };
   return (
     <div className="App">
       <header className="App-header">
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={TASKS} /></div>
+        <div><TaskList tasks={TASKS} onComplete = {onComplete} /></div>
         <div><AddTask/></div>
         <div><TaskButton/></div>
       </main>
