@@ -43,7 +43,14 @@ const App = () => {
   const [taskData, setTaskData]= useState(TASKS);
 
   const onComplete = (id) => {
-    console.log(`Task ${id} is complete`);
+    const completed = taskData.map((task)=>{
+      if(task.id === id){
+        return {...task, isComplete: !task.isComplete};
+      } else {
+        return task;
+      }
+    });
+    setTaskData(completed);
   };
   return (
     <div className="App">
