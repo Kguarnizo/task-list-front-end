@@ -58,7 +58,7 @@ const App = () => {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={TASKS} onComplete = {onComplete} /></div>
+        <div><TaskList tasks={taskData} onComplete = {onComplete} /></div>
         <div><AddTask/></div>
         <div><TaskButton/></div>
       </main>
