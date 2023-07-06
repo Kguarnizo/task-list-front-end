@@ -11,7 +11,8 @@ const TaskList = (props) => {
           id={task.id}
           title={task.title}
           isComplete={task.isComplete}
-          taskFunct = {props.onComplete}
+          onComplete = {props.onComplete}
+          onUnregister = {props.onUnregister}
         />
       );
   }
@@ -28,7 +29,8 @@ TaskList.propTypes = {
       isComplete: PropTypes.bool.isRequired,
     })
   ).isRequired,
-  onComplete : PropTypes.func.isRequired
+  onComplete : PropTypes.func.isRequired,
+  onUnregister : PropTypes.func.isRequired
 };
 
 export default TaskList;

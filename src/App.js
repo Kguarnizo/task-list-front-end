@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
 import AddTask from './components/AddTask.js';
 import TaskButton from './components/TaskButton.js';
-import {useState}  from "react";
+
 
 const TASKS = [
   {
@@ -52,13 +52,20 @@ const App = () => {
     });
     setTaskData(completed);
   };
+
+  const onUnregister = (id) => {
+    setTaskData((taskData)=> taskData.filter((task)=> {
+      return task.id !== id;
+    }));
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={taskData} onComplete = {onComplete} /></div>
+        <div><TaskList tasks={taskData} onComplete = {onComplete} onUnregister={onUnregister}/></div>
         <div><AddTask/></div>
         <div><TaskButton/></div>
       </main>
