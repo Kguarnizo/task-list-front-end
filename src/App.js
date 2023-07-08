@@ -1,63 +1,85 @@
-import React, {useState} from 'react';
+/* eslint-disable camelcase */
+import React, {useState, useEffect} from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
 import AddTask from './components/AddTask.js';
 import TaskButton from './components/TaskButton.js';
+import axios from 'axios';
 
+const kBaseUrl = 'http://127.0.0.1:5000';
 
-const TASKS = [
-  {
-    id: 1,
-    title: 'Mow the lawn',
-    isComplete: false,
-  },
-  {
-    id: 2,
-    title: 'Cook Pasta',
-    isComplete: true,
-  },
-  {
-    id: 3,
-    title: 'Do Laundry',
-    isComplete: true,
-  },
-  {
-    id: 4,
-    title: 'Go Shopping',
-    isComplete: false,
-  },
-  {
-    id: 5,
-    title: 'Clean House',
-    isComplete: false,
-  },
-  {
-    id: 6,
-    title: 'Walk Dog',
-    isComplete: true,
-  },
-];
+const convertFromApi = (apiTask) => {
+  const { id, title, description, is_complete } = apiTask;
+  const newTask = { id, title, description, isComplete: is_complete };
+  return newTask;
+};
+
+const getAllTasks = () => {
+  return axios
+  .get(`${kBaseUrl}/tasks`)
+  .then((response) => {
+    return response.data.map(convertFromApi);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+const updateTask =(id, markComplete) => {
+  const endpoint = markComplete ? 'mark_complete' : 'mark_incomplete';
+  return axios
+  .patch(`${kBaseUrl}/tasks/${id}/${endpoint}`)
+  .then(response => {
+    console.log(convertFromApi(response.data.task));
+    return convertFromApi(response.data.task);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
+
+const deleteTask = (id) => {
+  return axios
+  .delete(`${kBaseUrl}/tasks/${id}`)
+  .catch((error) => {
+    console.log(error);
+  });
+};
 
 const App = () => {
-
-  const [taskData, setTaskData]= useState(TASKS);
+  const [taskData, setTaskData]= useState([]);
 
   const onComplete = (id) => {
-    const completed = taskData.map((task)=>{
-      if(task.id === id){
-        return {...task, isComplete: !task.isComplete};
-      } else {
-        return task;
-      }
+    updateTask(id).then((updatedTask) => {
+      setTaskData((oldData) => {
+        return oldData.map((task) => {
+          if (task.id === id) {
+            return updatedTask;
+          }
+          return task;
+        });
+      });
     });
-    setTaskData(completed);
   };
 
   const onUnregister = (id) => {
-    setTaskData((taskData)=> taskData.filter((task)=> {
-      return task.id !== id;
-    }));
+    deleteTask(id).then(() => {
+      setTaskData((oldData) => {
+        return oldData.filter((task) => task.id !== id);
+      });
+    });
   };
+
+  const fetchTasks = () => {
+    return getAllTasks()
+    .then((tasks) => {
+      setTaskData(tasks);
+    });
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <div className="App">
