@@ -14,6 +14,8 @@ const NewTaskForm = (props) => {
         const newTask = {
             title: newTitle,
             description: '',
+            // eslint-disable-next-line camelcase
+            is_complete: '',
         };
 
         props.onHandleSubmit(newTask);

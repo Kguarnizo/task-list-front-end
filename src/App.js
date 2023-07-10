@@ -82,9 +82,10 @@ const App = () => {
   }, []);
 
   const onHandleSubmit = (data) => {
-    axios.post(`${kBaseUrl}/tasks`, data)
+    axios
+      .post(`${kBaseUrl}/tasks`, data)
       .then ((response) => {
-        setTaskData((oldData) => [...oldData, convertFromApi(response.data)]);
+        setTaskData((oldData) => [...oldData, convertFromApi(response.data.task)]);
       })
       .catch((e) => console.log(e));
   };
