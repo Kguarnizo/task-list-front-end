@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import React, {useState, useEffect} from 'react';
-import TaskList from './components/TaskList.js';
+import React, { useState, useEffect } from 'react';
+import TaskList from './components/TaskList';
 import './App.css';
-import AddTask from './components/AddTask.js';
-import TaskButton from './components/TaskButton.js';
+import NewTaskForm from './components/NewTaskForm';
+import TaskButton from './components/TaskButton';
 import axios from 'axios';
 
 const kBaseUrl = 'http://127.0.0.1:5000';
@@ -81,6 +81,14 @@ const App = () => {
     fetchTasks();
   }, []);
 
+  const onHandleSubmit = (data) => {
+    axios.post(`${kBaseUrl}/tasks`, data)
+      .then ((response) => {
+        setTaskData((oldData) => [...oldData, convertFromApi(response.data)]);
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -88,8 +96,7 @@ const App = () => {
       </header>
       <main>
         <div><TaskList tasks={taskData} onComplete = {onComplete} onUnregister={onUnregister}/></div>
-        <div><AddTask/></div>
-        <div><TaskButton/></div>
+        <div><NewTaskForm onHandleSubmit={onHandleSubmit}></NewTaskForm></div>
       </main>
     </div>
   );
