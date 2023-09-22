@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import TaskList from './components/TaskList';
 import './App.css';
 import NewTaskForm from './components/NewTaskForm';
-import TaskButton from './components/TaskButton';
+// import TaskButton from './components/TaskButton';
 import axios from 'axios';
 
-const kBaseUrl = 'http://127.0.0.1:5000';
+const kBaseUrl = 'https://task-list-api-project-zoisite-kg.onrender.com';
 
 const convertFromApi = (apiTask) => {
   const { id, title, description, is_complete } = apiTask;
@@ -25,7 +25,7 @@ const getAllTasks = () => {
   });
 };
 
-const updateTask =(id, markComplete) => {
+const updateTaskCompletion =(id, markComplete) => {
   const endpoint = markComplete ? 'mark_complete' : 'mark_incomplete';
   return axios
   .patch(`${kBaseUrl}/tasks/${id}/${endpoint}`)
@@ -50,17 +50,22 @@ const App = () => {
   const [taskData, setTaskData]= useState([]);
 
   const onComplete = (id) => {
-    updateTask(id).then((updatedTask) => {
-      setTaskData((oldData) => {
-        return oldData.map((task) => {
-          if (task.id === id) {
-            return updatedTask;
-          }
-          return task;
+    const taskToUpdate = taskData.find((task) => task.id == id);
+
+    if (taskToUpdate) {
+      const updateIsComplete = !taskToUpdate.isComplete;
+      updateTaskCompletion(id, updateIsComplete).then((updatedTask) => {
+        setTaskData((oldData) => {
+          return oldData.map((task) => {
+            if (task.id === id) {
+              return updatedTask;
+            }
+            return task;
         });
       });
     });
-  };
+  }
+};
 
   const onUnregister = (id) => {
     deleteTask(id).then(() => {
